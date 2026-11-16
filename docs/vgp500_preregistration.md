@@ -192,9 +192,10 @@ P01–P10, the Tier-3A trio, both backends):
 |---|---|---|
 | now | Start the collection sweep: k-mer profiles + BUSCO + assembly stats for every candidate assembly (5.5–5.10) — cheapest first, no dependencies | Shuo |
 | now | hap1×hap2 alignments + 1:1 filtering for the pilot-known pairs first (they validate the scaled pipeline), then the full set in size order | Shuo |
-| now | Life-history / `Nc` proxy coding (5.11) — slowest external dependency, start immediately | Erik + Shua |
+| now | Life-history / `Nc` proxy coding (5.11) — slowest external dependency, start immediately | Erik + Shuo |
+| now | Segdup calling method ready; run on Shuo's raw fastga alignments as each pair lands (5.3a) | Farnaz |
 | +1 wk | QC gate pass/fail list + failure ledger for the species set (§3) | Shuo |
-| +2 wk | Variant calling + π estimator + triage flags on the first ~50 species | Shuo + Erik |
+| +2 wk | Variant calling + π estimator + triage flags + segdup in/outside contrast on the first ~50 species | Shuo + Erik + Farnaz |
 | +3–4 wk | Validation subset cross-backend + symmetric read test calibration (§6) | Shuo |
 | +5–6 wk | Full π table; freeze; analysis per §7; manuscript section drafted into `manuscript.typ` | Erik |
 
