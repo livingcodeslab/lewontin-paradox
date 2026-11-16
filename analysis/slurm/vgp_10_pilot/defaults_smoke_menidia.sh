@@ -40,13 +40,17 @@ cp --reflink=auto -- "$H2" "$SCRATCH/h2.fa"
 cd "$SCRATCH"
 
 echo "[$(date -u +%FT%TZ)] START defaults mapping: threads=$SLURM_CPUS_PER_TASK"
-/usr/bin/time -v "$SWEEPGA" ./h2.fa ./h1.fa \
+# workers nodes lack /usr/bin/time; sweepga self-reports rss/disk/peak_disk
+# in its stderr, plus a light ps sampler for core utilization:
+( while true; do ps -e -o pcpu=,rss=,comm= | grep -E "^( *[0-9.]+ ){2}(sweepga|fastga|wfmash)" >> "$OUT/cpu_sample.log"; sleep 5; done ) &
+SAMPLER=$!
+"$SWEEPGA" ./h2.fa ./h1.fa \
     --output-file "$SCRATCH/h2_to_h1.defaults.paf" \
     --num-mappings 1:1 --threads "$SLURM_CPUS_PER_TASK" \
     > "$OUT/sweepga.stdout" 2> "$OUT/sweepga.stderr"
+kill $SAMPLER 2>/dev/null || true
 echo "[$(date -u +%FT%TZ)] DONE mapping"
 
-grep -E "Maximum resident|Elapsed|Percent of CPU" "$OUT/sweepga.stderr" | tail -3
 cp "$SCRATCH/h2_to_h1.defaults.paf" "$OUT/h2_to_h1.defaults.paf"
 du -sb "$OUT" >> "$OUT/scratch_note.txt"
 sha256sum "$OUT/h2_to_h1.defaults.paf" > "$OUT/paf.sha256"

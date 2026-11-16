@@ -228,7 +228,7 @@ threads=${SLURM_CPUS_PER_TASK:-32}
 native_paf="$partial/h2_to_h1.native.1to1.paf"
 stage "write command record + gate checks"
 printf '%q ' "$sweepga" "$scratch/inputs/h2.fa" "$scratch/inputs/h1.fa" \
-    --output-file "$native_paf" --num-mappings 1:1 --scaffold-jump 0 \
+    --output-file "$native_paf" --aligner fastga --num-mappings 1:1 --scaffold-jump 0 \
     --overlap 0 --scoring log-length-ani --threads "$threads" \
     --temp-dir "$scratch/sweepga-temp" > "$partial/command.txt"
 printf '\n' >> "$partial/command.txt"
@@ -239,7 +239,7 @@ mkdir -p "$scratch/sweepga-temp"
 
 stage "launch sweepga/fastga (pid written when backgrounded)"
 "$sweepga" "$scratch/inputs/h2.fa" "$scratch/inputs/h1.fa" \
-    --output-file "$native_paf" --num-mappings 1:1 --scaffold-jump 0 \
+    --output-file "$native_paf" --aligner fastga --num-mappings 1:1 --scaffold-jump 0 \
     --overlap 0 --scoring log-length-ani --threads "$threads" \
     --temp-dir "$scratch/sweepga-temp" \
     >"$partial/sweepga.stdout" 2>"$partial/sweepga.stderr" &
